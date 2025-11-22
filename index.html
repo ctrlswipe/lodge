@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>The Owl Lodge | Norway</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        :root {
+            /* Reduced size for the constant glow */
+            --cursor-size: 20px;
+            --glow-color: rgba(212, 175, 55, 0.6); /* Gold/Star glow opacity */
+        }
+
+        body {
+            background-color: #0c0e0d; /* Anthracite Black/Green deep mix */
+            color: #e7e5e4; /* Stone 200 */
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden; /* Prevent horizontal scroll */
+            cursor: default; /* Standard cursor */
+        }
+
+        h1, h2, h3, h4, .serif {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* --- Custom Cursor Logic (Glow Only) --- */
+        #custom-cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: var(--cursor-size);
+            height: var(--cursor-size);
+            pointer-events: none;
+            z-index: 9999; /* Sits above content */
+            transform: translate(-50%, -50%); /* Center on mouse */
+            transition: transform 0.15s ease-out, width 0.2s, height 0.2s; /* Smoother follow */
+            display: block;
+            
+            /* Adjusted gradient for a "lantern" feel */
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.9) 0%, rgba(212, 175, 55, 0.2) 50%, transparent 80%);
+            
+            border-radius: 50%;
+            opacity: 1; /* Always visible now */
+            mix-blend-mode: screen; /* Light effect */
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.3); /* Soft ambient spill */
+        }
+
+        /* Click State: Flare Up */
+        .cursor-clicked {
+            transform: translate(-50%, -50%) scale(3) !important; /* Expands significantly */
+            background: radial-gradient(circle, rgba(212, 175, 55, 1) 0%, rgba(212, 175, 55, 0.4) 60%, transparent 90%);
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.6);
+        }
+
+        /* Hide custom cursor on mobile */
+        @media (pointer: coarse) or (max-width: 768px) {
+            #custom-cursor { display: none; }
+        }
+
+        /* --- Scrollbar Styling --- */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1c1917;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #44403c;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #78716c;
+        }
+
+        /* --- Glassmorphism Classes --- */
+        .glass {
+            background: rgba(28, 25, 23, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .glass-heavy {
+            background: rgba(12, 14, 13, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* --- Utilities --- */
+        .text-gradient {
+            background: linear-gradient(to right, #e7e5e4, #a8a29e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 1s ease-out forwards;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        @keyframes fadeInUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Image Hover Zoom */
+        .img-container {
+            overflow: hidden;
+        }
+        .img-container img {
+            transition: transform 0.7s ease;
+        }
+        .img-container:hover img {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-emerald-900 selection:text-white">
+
+    <!-- Custom Cursor Element -->
+    <div id="custom-cursor"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 top-0 transition-all duration-300" id="navbar">
+        <div class="glass absolute inset-0 z-[-1]"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo -->
+                <div class="flex-shrink-0 cursor-pointer" onclick="window.scrollTo(0,0)">
+                    <span class="serif text-2xl font-semibold tracking-widest text-white">THE OWL LODGE</span>
+                    <span class="block text-[10px] tracking-[0.3em] text-stone-400 text-center">NORWAY</span>
+                </div>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="#home" class="hover:text-emerald-400 transition-colors duration-300 text-sm tracking-widest">HOME</a>
+                        <a href="#about" class="hover:text-emerald-400 transition-colors duration-300 text-sm tracking-widest">ABOUT</a>
+                        <a href="#amenities" class="hover:text-emerald-400 transition-colors duration-300 text-sm tracking-widest">AMENITIES</a>
+                        <a href="#activities" class="hover:text-emerald-400 transition-colors duration-300 text-sm tracking-widest">ACTIVITIES</a>
+                        <a href="#gallery" class="hover:text-emerald-400 transition-colors duration-300 text-sm tracking-widest">GALLERY</a>
+                        <a href="#contact" class="hover:text-emerald-400 transition-colors duration-300 text-sm tracking-widest">CONTACT</a>
+                        
+                        <button onclick="openBooking()" class="bg-emerald-900/50 hover:bg-emerald-800 border border-emerald-700/50 text-white px-6 py-2 rounded-sm transition-all duration-300 hover:shadow-[0_0_15px_rgba(16,185,129,0.2)] text-sm tracking-widest">
+                            BOOK NOW
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden">
+                    <button onclick="toggleMobileMenu()" class="text-stone-300 hover:text-white p-2">
+                        <i data-lucide="menu" class="w-6 h-6"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden glass-heavy border-t border-stone-800">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 text-center">
+                <a href="#home" onclick="toggleMobileMenu()" class="block px-3 py-2 text-base font-medium hover:text-emerald-400">HOME</a>
+                <a href="#about" onclick="toggleMobileMenu()" class="block px-3 py-2 text-base font-medium hover:text-emerald-400">ABOUT</a>
+                <a href="#amenities" onclick="toggleMobileMenu()" class="block px-3 py-2 text-base font-medium hover:text-emerald-400">AMENITIES</a>
+                <a href="#activities" onclick="toggleMobileMenu()" class="block px-3 py-2 text-base font-medium hover:text-emerald-400">ACTIVITIES</a>
+                <a href="#gallery" onclick="toggleMobileMenu()" class="block px-3 py-2 text-base font-medium hover:text-emerald-400">GALLERY</a>
+                <a href="#contact" onclick="toggleMobileMenu()" class="block px-3 py-2 text-base font-medium hover:text-emerald-400">CONTACT</a>
+                <button onclick="toggleMobileMenu(); openBooking()" class="w-full mt-4 bg-emerald-900 text-white py-3 mb-2">BOOK YOUR STAY</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section id="home" class="relative h-screen w-full overflow-hidden flex items-center justify-center">
+        <!-- Background Media with Video Support -->
+        <div class="absolute inset-0 z-0">
+            <video 
+                autoplay 
+                muted 
+                loop 
+                playsinline 
+                poster="https://images.unsplash.com/photo-1445964047600-cdbdb873673d?q=80&w=2800&auto=format&fit=crop"
+                class="w-full h-full object-cover opacity-60">
+                <source src="hero.mp4" type="video/mp4">
+            </video>
+            <div class="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-[#0c0e0d]"></div>
+        </div>
+
+        <div class="relative z-10 text-center px-4 max-w-4xl mx-auto mt-16">
+            <p class="text-emerald-400 tracking-[0.5em] text-sm mb-6 uppercase fade-in-up" style="animation-delay: 0.2s">Sanctuary in the Nordic Wilds</p>
+            <h1 class="text-5xl md:text-7xl lg:text-8xl text-white mb-8 serif fade-in-up text-shadow-lg" style="animation-delay: 0.4s">
+                The Owl Lodge
+            </h1>
+            <p class="text-stone-300 text-lg md:text-xl max-w-2xl mx-auto font-light leading-relaxed fade-in-up" style="animation-delay: 0.6s">
+                Experience the silence of the Norwegian forest. A modern architectural marvel hidden among ancient pines.
+            </p>
+            <div class="mt-12 fade-in-up" style="animation-delay: 0.8s">
+                <button onclick="document.getElementById('about').scrollIntoView()" class="animate-bounce text-white/50 hover:text-white transition-colors">
+                    <i data-lucide="chevron-down" class="w-10 h-10 mx-auto"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- HISTORY & ABOUT -->
+    <section id="about" class="py-24 px-4 relative">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+            <div class="space-y-8 order-2 md:order-1">
+                <h2 class="text-4xl md:text-5xl text-white serif">A History Carved in Wood</h2>
+                <div class="h-1 w-20 bg-emerald-800"></div>
+                <p class="text-stone-400 leading-loose text-justify">
+                    Established in 1924 as a hunter's refuge, The Owl Lodge has stood silent witness to a century of Norwegian winters. In 2023, it was meticulously restored by award-winning architects, blending the original timber soul with modern brutalist elegance.
+                </p>
+                <p class="text-stone-400 leading-loose text-justify">
+                    Located in the heart of Telemark, we are surrounded by whispering pines and historical echoes. Accessibility is an adventure in itself—reachable by a private 4x4 track in summer, or a guided snowmobile transfer in winter. We define luxury not by excess, but by the profound connection to nature.
+                </p>
+                <div class="flex gap-4 pt-4">
+                    <div class="glass p-4 text-center min-w-[100px]">
+                        <span class="block text-2xl text-emerald-400 serif">100+</span>
+                        <span class="text-xs tracking-widest text-stone-500">YEARS</span>
+                    </div>
+                    <div class="glass p-4 text-center min-w-[100px]">
+                        <span class="block text-2xl text-emerald-400 serif">950m</span>
+                        <span class="text-xs tracking-widest text-stone-500">ALTITUDE</span>
+                    </div>
+                </div>
+            </div>
+            <div class="order-1 md:order-2 img-container relative h-[500px] rounded-sm overflow-hidden">
+                <!-- Interior Details Image Replacement -->
+                <img src="interiordetails.jpg" 
+                     onerror="this.src='https://images.unsplash.com/photo-1518732656745-d4185f786592?q=80&w=2000&auto=format&fit=crop'" 
+                     alt="Interior details" 
+                     class="w-full h-full object-cover">
+                <div class="absolute bottom-0 left-0 bg-gradient-to-t from-black to-transparent h-1/3 w-full"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AMENITIES -->
+    <section id="amenities" class="py-20 bg-[#131614]">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl serif mb-4">Uncompromised Comfort</h2>
+                <p class="text-stone-500 max-w-xl mx-auto">Everything you need to disconnect from the world and reconnect with yourself.</p>
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <!-- Item 1 -->
+                <div class="glass p-8 flex flex-col items-center justify-center hover:bg-stone-900/50 transition-colors group">
+                    <i data-lucide="wifi" class="w-8 h-8 text-stone-500 group-hover:text-emerald-400 mb-4 transition-colors"></i>
+                    <span class="text-sm tracking-wider">Starlink WiFi</span>
+                </div>
+                <!-- Item 2 -->
+                <div class="glass p-8 flex flex-col items-center justify-center hover:bg-stone-900/50 transition-colors group">
+                    <i data-lucide="flame" class="w-8 h-8 text-stone-500 group-hover:text-emerald-400 mb-4 transition-colors"></i>
+                    <span class="text-sm tracking-wider">Stone Fireplace</span>
+                </div>
+                <!-- Item 3 -->
+                <div class="glass p-8 flex flex-col items-center justify-center hover:bg-stone-900/50 transition-colors group">
+                    <i data-lucide="utensils" class="w-8 h-8 text-stone-500 group-hover:text-emerald-400 mb-4 transition-colors"></i>
+                    <span class="text-sm tracking-wider">Chef's Kitchen</span>
+                </div>
+                <!-- Item 4 -->
+                <div class="glass p-8 flex flex-col items-center justify-center hover:bg-stone-900/50 transition-colors group">
+                    <i data-lucide="droplets" class="w-8 h-8 text-stone-500 group-hover:text-emerald-400 mb-4 transition-colors"></i>
+                    <span class="text-sm tracking-wider">Outdoor Hot Tub</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ACTIVITIES / LANDMARKS -->
+    <section id="activities" class="py-24 px-4 relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-full z-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/wood-pattern.png')]"></div>
+        
+        <div class="max-w-7xl mx-auto relative z-10">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-12">
+                <div>
+                    <h2 class="text-4xl serif text-white mb-2">Close Landmarks & Activities</h2>
+                    <div class="h-1 w-16 bg-emerald-700"></div>
+                </div>
+                <p class="text-stone-500 mt-4 md:mt-0">Explore the historic grounds of Telemark.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Card 1: Church -->
+                <div class="group relative h-96 glass overflow-hidden cursor-pointer">
+                    <img src="church.jpg" 
+                         onerror="this.src='https://images.unsplash.com/photo-1508185169057-023cb30030eb?q=80&w=1000&auto=format&fit=crop'"
+                         class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-70 group-hover:opacity-50">
+                    <div class="absolute bottom-0 left-0 p-6 w-full bg-gradient-to-t from-black via-black/80 to-transparent">
+                        <h3 class="text-xl serif text-white mb-2">Heddal Stave Church</h3>
+                        <p class="text-stone-400 text-sm line-clamp-2 group-hover:line-clamp-none transition-all">Built in the 13th century, this is Norway's largest stave church. A fairytale structure only 20 minutes away.</p>
+                    </div>
+                </div>
+
+                <!-- Card 2: Hiking -->
+                <div class="group relative h-96 glass overflow-hidden cursor-pointer">
+                    <img src="hiking.jpg" 
+                         onerror="this.src='https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?q=80&w=1000&auto=format&fit=crop'"
+                         class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-70 group-hover:opacity-50">
+                    <div class="absolute bottom-0 left-0 p-6 w-full bg-gradient-to-t from-black via-black/80 to-transparent">
+                        <h3 class="text-xl serif text-white mb-2">Forest Hiking</h3>
+                        <p class="text-stone-400 text-sm">Direct access to marked trails leading to panoramic views of the Gaustatoppen mountain.</p>
+                    </div>
+                </div>
+
+                <!-- Card 3: Northern Lights -->
+                <div class="group relative h-96 glass overflow-hidden cursor-pointer">
+                    <img src="northernlights.jpg" 
+                         onerror="this.src='https://images.unsplash.com/photo-1544473673-0a88f81fa2c6?q=80&w=1000&auto=format&fit=crop'"
+                         class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-70 group-hover:opacity-50">
+                    <div class="absolute bottom-0 left-0 p-6 w-full bg-gradient-to-t from-black via-black/80 to-transparent">
+                        <h3 class="text-xl serif text-white mb-2">Northern Lights</h3>
+                        <p class="text-stone-400 text-sm">Between September and March, our secluded location offers zero light pollution for aurora hunting.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- GALLERY -->
+    <section id="gallery" class="py-20 bg-[#080908]">
+        <div class="max-w-7xl mx-auto px-4">
+            <h2 class="text-4xl serif text-center mb-16"><span class="text-stone-600 italic mr-2">The</span> Gallery</h2>
+            
+            <!-- 
+                NOTE: Trying to load local gallery/x.jpg images. 
+                Includes 'onerror' fallback to Unsplash if files don't exist locally.
+            -->
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 auto-rows-[200px]">
+                <!-- Generating 12 Gallery Items with fallbacks -->
+                <script>
+                    const fallbacks = [
+                        "https://images.unsplash.com/photo-1461958508236-9a742665a0d5?auto=format&fit=crop&w=600",
+                        "https://images.unsplash.com/photo-1482192505345-5655af888cc4?auto=format&fit=crop&w=600",
+                        "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=600",
+                        "https://images.unsplash.com/photo-1504624935171-0c7486c720f9?auto=format&fit=crop&w=600",
+                        "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=600",
+                        "https://images.unsplash.com/photo-1501630834273-4b5604d2ee31?auto=format&fit=crop&w=600",
+                        "https://images.unsplash.com/photo-1510798831971-661eb04b3739?auto=format&fit=crop&w=600",
+                        "https://images.unsplash.com/photo-1542718610-a1d656d1884c?auto=format&fit=crop&w=600",
+                        "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=600",
+                        "https://images.unsplash.com/photo-1493246507139-91e8fad9978e?auto=format&fit=crop&w=600",
+                        "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=600",
+                        "https://images.unsplash.com/photo-1521336575822-6da63fb45455?auto=format&fit=crop&w=600"
+                    ];
+
+                    for(let i=1; i<=12; i++) {
+                        document.write(`
+                            <div class="img-container w-full h-full relative overflow-hidden rounded-sm ${i % 5 === 0 ? 'md:col-span-2' : ''}">
+                                <img src="gallery/${i}.jpg" 
+                                     onerror="this.src='${fallbacks[i-1]}'"
+                                     alt="Gallery Image ${i}" 
+                                     class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700">
+                                <div class="absolute inset-0 ring-1 ring-white/10 pointer-events-none"></div>
+                            </div>
+                        `);
+                    }
+                </script>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="py-24 px-4">
+        <div class="max-w-4xl mx-auto glass p-8 md:p-12 border border-stone-800 relative overflow-hidden">
+            <!-- Decorative background blob -->
+            <div class="absolute top-[-50%] left-[-20%] w-96 h-96 bg-emerald-900/20 rounded-full blur-3xl pointer-events-none"></div>
+
+            <div class="relative z-10 text-center">
+                <h2 class="text-3xl serif mb-8">Contact The Lodge</h2>
+                <div class="grid md:grid-cols-3 gap-8 text-stone-300 mb-12">
+                    <div class="flex flex-col items-center">
+                        <i data-lucide="map-pin" class="mb-4 text-emerald-500"></i>
+                        <p class="text-sm">Telemark Woods, 3800<br>Bø, Norway</p>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <i data-lucide="phone" class="mb-4 text-emerald-500"></i>
+                        <p class="text-sm">+47 90 00 00 00<br>Mon-Fri, 9am - 6pm</p>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <i data-lucide="mail" class="mb-4 text-emerald-500"></i>
+                        <p class="text-sm">reservations@owllodge.no<br>info@owllodge.no</p>
+                    </div>
+                </div>
+                <button onclick="openBooking()" class="w-full md:w-auto bg-stone-200 text-stone-900 px-12 py-4 font-bold tracking-widest hover:bg-emerald-400 transition-colors duration-300">
+                    CHECK AVAILABILITY
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-black py-12 border-t border-stone-900">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <div class="mb-6">
+                 <i data-lucide="feather" class="w-8 h-8 mx-auto text-stone-600"></i>
+            </div>
+            <p class="text-stone-500 text-sm mb-2">"The woods are lovely, dark and deep."</p>
+            <p class="text-stone-700 text-xs tracking-widest">&copy; 2025 The Owl Lodge. Made with <span class="text-red-900">♥</span> in the cold North.</p>
+        </div>
+    </footer>
+
+    <!-- BOOKING OVERLAY MODAL -->
+    <div id="booking-modal" class="fixed inset-0 z-[10000] hidden">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeBooking()"></div>
+        
+        <!-- Modal Content -->
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-lg px-4">
+            <div class="glass-heavy border border-stone-700 p-8 rounded shadow-2xl relative">
+                <button onclick="closeBooking()" class="absolute top-4 right-4 text-stone-500 hover:text-white transition-colors">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+
+                <div id="booking-form-container">
+                    <h3 class="text-2xl serif text-white mb-1">Book Your Stay</h3>
+                    <p class="text-stone-400 text-xs mb-6">Select your dates to retreat into nature.</p>
+
+                    <form id="booking-form" onsubmit="handleBooking(event)" class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs text-stone-500 mb-1 uppercase tracking-wider">Name</label>
+                                <input type="text" required class="w-full bg-black/50 border border-stone-700 text-stone-200 p-3 focus:border-emerald-500 focus:outline-none transition-colors text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-xs text-stone-500 mb-1 uppercase tracking-wider">Phone</label>
+                                <input type="tel" required class="w-full bg-black/50 border border-stone-700 text-stone-200 p-3 focus:border-emerald-500 focus:outline-none transition-colors text-sm">
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-xs text-stone-500 mb-1 uppercase tracking-wider">Email</label>
+                            <input type="email" required class="w-full bg-black/50 border border-stone-700 text-stone-200 p-3 focus:border-emerald-500 focus:outline-none transition-colors text-sm">
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs text-stone-500 mb-1 uppercase tracking-wider">Check-In</label>
+                                <input type="date" required class="w-full bg-black/50 border border-stone-700 text-stone-200 p-3 focus:border-emerald-500 focus:outline-none transition-colors text-sm scheme-dark">
+                            </div>
+                            <div>
+                                <label class="block text-xs text-stone-500 mb-1 uppercase tracking-wider">Check-Out</label>
+                                <input type="date" required class="w-full bg-black/50 border border-stone-700 text-stone-200 p-3 focus:border-emerald-500 focus:outline-none transition-colors text-sm scheme-dark">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs text-stone-500 mb-1 uppercase tracking-wider">Message (Optional)</label>
+                            <textarea rows="3" class="w-full bg-black/50 border border-stone-700 text-stone-200 p-3 focus:border-emerald-500 focus:outline-none transition-colors text-sm"></textarea>
+                        </div>
+
+                        <button type="submit" class="w-full bg-emerald-900 hover:bg-emerald-800 text-white font-bold py-4 mt-2 transition-all duration-300 border border-emerald-700/50 shadow-[0_0_20px_rgba(16,185,129,0.1)]">
+                            CONFIRM BOOKING
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Success Message (Hidden by default) -->
+                <div id="success-message" class="hidden text-center py-12">
+                    <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-emerald-900/30 text-emerald-400 mb-4 animate-pulse">
+                        <i data-lucide="check" class="w-8 h-8"></i>
+                    </div>
+                    <h4 class="text-2xl serif text-white mb-2">Booking Received</h4>
+                    <p class="text-stone-400">Thank you for your booking! We will contact you shortly.</p>
+                    <p class="text-stone-600 text-xs mt-4">Redirecting you to home...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- Initialize Icons ---
+        lucide.createIcons();
+
+        // --- Custom Cursor Logic ---
+        const cursor = document.getElementById('custom-cursor');
+        
+        // Track mouse movement
+        document.addEventListener('mousemove', (e) => {
+            // Use requestAnimationFrame for smoother performance if needed, 
+            // but direct assignment is usually fine for simple cursors
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        // Mouse Down: Show Glow
+        document.addEventListener('mousedown', () => {
+            cursor.classList.add('cursor-clicked');
+        });
+
+        // Mouse Up: Hide Glow
+        document.addEventListener('mouseup', () => {
+            cursor.classList.remove('cursor-clicked');
+        });
+
+        // Ensure links trigger the hover scale on the glow if desired, 
+        // though typically we just want the click glow now.
+        // We can keep the scale effect if you want the glow to be larger when hovering links WHILE clicking.
+        const interactiveElements = document.querySelectorAll('a, button, input, textarea');
+        interactiveElements.forEach(el => {
+            // Optional: You could make the glow slightly visible on hover if you wanted
+            // For now, we strictly follow "normal cursor before clicking"
+        });
+
+
+        // --- Mobile Menu Toggle ---
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // --- Booking Modal Logic ---
+        const bookingModal = document.getElementById('booking-modal');
+        
+        function openBooking() {
+            bookingModal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden'; // Prevent background scroll
+        }
+
+        function closeBooking() {
+            bookingModal.classList.add('hidden');
+            document.body.style.overflow = ''; // Restore scroll
+            // Reset form state if closed mid-way
+            document.getElementById('booking-form-container').classList.remove('hidden');
+            document.getElementById('success-message').classList.add('hidden');
+        }
+
+        function handleBooking(e) {
+            e.preventDefault();
+            
+            // Hide form, show success
+            document.getElementById('booking-form-container').classList.add('hidden');
+            document.getElementById('success-message').classList.remove('hidden');
+
+            // Confetti-ish effect or just a delay then redirect
+            setTimeout(() => {
+                closeBooking();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                // Reset form for next time
+                e.target.reset();
+            }, 3000);
+        }
+
+        // --- Navbar Scroll Effect ---
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('shadow-lg');
+                navbar.querySelector('.glass').style.background = 'rgba(12, 14, 13, 0.9)';
+            } else {
+                navbar.classList.remove('shadow-lg');
+                navbar.querySelector('.glass').style.background = 'rgba(28, 25, 23, 0.4)';
+            }
+        });
+
+    </script>
+</body>
+</html>
